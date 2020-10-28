@@ -1,11 +1,13 @@
 (ns health.system
-  (:require [org.httpkit.server :refer [run-server]]))
+  (:require [ring.adapter.jetty :refer [run-jetty]]
+             [compojure.core :refer :all]
+             [compojure.route :as route]))
 
-(defn app [req]
-  {:status  200
-   :headers {"Content-Type" "text/html"}
-   :body    "hello HTTP!"})
+(defroutes app_routes
+  (GET "/" [] "Hello")
+  (GET "/coll" [] "COLL")
+  (route/not-found "<h1>Page not found</h1>"))
 
 (defn -main [& args]
-  (run-server app {:port 8000})
+  (run-jetty app_routes {:port 8000})
   (println "Started server"))
